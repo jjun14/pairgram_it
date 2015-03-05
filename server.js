@@ -57,11 +57,38 @@ io.sockets.on('connection', function(socket){
       }
     }
     socket.broadcast.emit('refreshRoomList', rooms);
+    // socket.to(data.room_key).broadcast.emit("new_user", data);
   })
 
-  socket.on('sendOffer', function(data){
-    console.log('got offer');
-  })
+  // Wait for the other user to join before triggering the video call
+  socket.on("trigger_video_call", function(data){
+    for(room in rooms){
+      if(room == data.room_key){
+
+        if(rooms[room].users.length == 1)
+        {
+          socket.to(data.room_key).broadcast.emit("new_user", data);
+        }
+      }
+    }
+  });
+
+  // pass the user candidate information to the other user
+  socket.on('new_candidate', function(data){
+      socket.to(data.room_key).broadcast.emit("set_candidate", data);
+  });
+
+
+  // offer user session description to other user
+  socket.on("create_sdp", function(data){
+     socket.to(data.room_key).broadcast.emit("new_offer", data);
+  });
+
+
+  // answer and return your user session description to other user
+  socket.on("answer_sdp", function(data){
+     socket.to(data.room_key).broadcast.emit("answer_sdp", data);
+  });
 
   socket.on('keyPress', function(data){
     console.log(data);
