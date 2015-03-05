@@ -1,0 +1,14 @@
+<div class="container-fluid" ng-controller='EditorsController'>
+  <div class="row-fluid videofeed">
+    <div class="col-md-12 col-md-offset-1">
+      <video id='localVideo' autoplay muted></video>
+      <!-- <p>{{room_key}}</p> -->
+      <video id="remoteVideo" autoplay></video>
+    </div>  
+  </div>
+  <div class="row-fluid">
+    <div class="col-md-12">
+      <div id="editor" ui-ace="" ng-model="code"></div>
+    </div>
+  </div>
+</div>
